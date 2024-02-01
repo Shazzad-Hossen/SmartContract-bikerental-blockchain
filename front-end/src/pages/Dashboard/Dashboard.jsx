@@ -1,6 +1,7 @@
 import { FaGoogleWallet } from "react-icons/fa";
 import { FaSackDollar } from "react-icons/fa6";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
+import { ImCross } from "react-icons/im";
 import { FaCheck } from "react-icons/fa";
 import kTM from '../../assets/ktm.png';
 import kawasaki from '../../assets/kawasaki.png';
@@ -9,10 +10,11 @@ import { useContext, useState } from "react";
 import { BlockchainContext } from "../../context/BlockchainContext";
 
 const Dashboard = () => {
-  const {renter, addRenter, diposit, balance, due, totalDuration}= useContext(BlockchainContext);
+  const {renter, addRenter, diposit, balance, due, totalDuration, checkoutBike, checkinBike, makeduePayment, renterDetails}= useContext(BlockchainContext);
   const [name,setName]=useState({first:'', last:''});
   const [creditAmount, setCreditAmount]=useState(0);
-
+  const [duepaymentAmount, setDuepaymentamount]=useState(0);
+console.log(renterDetails);
   
 
   return (
@@ -20,7 +22,7 @@ const Dashboard = () => {
     {
       renter? <div className="p-5">
       <h1 className="text-end font-[700] text-lg">
-        Welcome <span className="text-sky-700">Shazzad</span>!
+        Welcome <span className="text-sky-700">{renterDetails? renterDetails[0]+' '+renterDetails[1]:''}</span>
       </h1>
       {/* Stats */}
       <div className="px-5 py-10 flex justify-center">
@@ -51,10 +53,17 @@ const Dashboard = () => {
 
           <div className="border rounded-[0.5rem] p-2 w-[200px] h-[100px] shadow-md flex justify-between items-center">
             <div className="">
-              <h2>Bike Status</h2>
-              <h1 className="font-[700] text-xl">&nbsp;</h1>
+              <h2>Rent Status</h2>
+              <h1 className="font-[700] text-xl">{
+               renterDetails && renterDetails[2]? `Can Rent`: `Can't Rent`
+              }
+               </h1>
             </div>
-            <FaCheck className="h-[50px] w-[50px] text-sky-700" />
+           {
+            renterDetails && renterDetails[2]? 
+            <FaCheck className="h-[50px] w-[50px] text-green-700" />:
+            <ImCross className="h-[45px] w-[45px] text-red-700" />
+           }
           </div>
         </div>
       </div>
@@ -67,11 +76,11 @@ const Dashboard = () => {
             Pay Due Amount
           </h1>
           <div className="p-2">
-          <input type="number" className="p-2 rounded border w-full outline-none " />
+          <input type="number" className="p-2 rounded border w-full outline-none " value={duepaymentAmount} onChange={({target:{value}})=>setDuepaymentamount(value)} />
 
           </div>
           <div className="p-2">
-          <button className="p-2 w-full bg-sky-600 active:scale-95 font-[700] rounded text-white">Submit</button>
+          <button className="p-2 w-full bg-sky-600 active:scale-95 font-[700] rounded text-white" onClick={()=>makeduePayment(duepaymentAmount)}>Submit</button>
           </div>
         </div>
 
@@ -101,8 +110,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The KTM RC 390 is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={()=>checkoutBike()} >Check Out</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={checkinBike}>Check In</button>
                     </div>
                 </div>
             </div>
@@ -114,8 +123,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The Kawasaki Ninja ZX-10R is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={()=>checkoutBike()}>Check Out</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={checkinBike}>Check In</button>
                     </div>
                 </div>
             </div>
@@ -127,8 +136,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The Yamaha MT09 is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]">Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={()=>checkoutBike()}>Check Out</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={checkinBike}>Check In</button>
                     </div>
                 </div>
             </div>

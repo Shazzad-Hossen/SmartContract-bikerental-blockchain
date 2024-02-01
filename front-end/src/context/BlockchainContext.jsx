@@ -15,6 +15,9 @@ const BlockchainProvider = ({ children }) => {
   const [renter, setRenter]=useState(false);
   const [due, setDue]=useState(0.00);
   const [totalDuration, setTotalDuration]=useState(0);
+  const [renterDetails,setRenterDetails]=useState(null);
+
+  console.log(renter);
 
   const getContract = async()=> {
     const signer =  await provider.getSigner();
@@ -61,7 +64,8 @@ const BlockchainProvider = ({ children }) => {
 
   const getDue = async()=> {
     const dueAmount = await contract.getDue(currentAccount);
-    setDue((dueAmount,18));
+    console.log('Due:' , dueAmount);
+    setDue(formatUnits(dueAmount,18));
   }
 
   //Get Total Duration 
@@ -82,6 +86,7 @@ const BlockchainProvider = ({ children }) => {
 
   const addRenter = async({first, last})=>{
     const newRenter = await contract.addRenters(currentAccount,first, last, true, false ,0,0,0,0);
+    console.log(newRenter);
     if(newRenter) {
         checkRenterExist();
         // const renterInfo = await contract.getRenter(currentAccount);
@@ -96,6 +101,43 @@ const BlockchainProvider = ({ children }) => {
     await dipositRes.wait();
     await getBalance();
     
+  }
+
+  //Make Due Payment
+
+  const makeduePayment = async(amount)=>{
+    const paymentRes = await contract.makePayment(currentAccount, { value: parseUnits(amount,18)});
+    await paymentRes.wait();
+    await getBalance();
+    await getDue();
+    await getTotalDuration();
+    if(paymentRes) alert('Due Payment Successful');
+    
+  }
+
+  //Checkout Bike
+
+  const checkoutBike = async()=> {
+    const checkoutRes= await contract.checkOut(currentAccount);
+    await checkoutRes.wait();
+    await getRenter();
+    if(checkoutRes) alert('Checkout Successfull');
+  }
+
+  //Checkin Bike
+
+  const checkinBike = async()=> {
+    const checkinRes = await contract.checkIn(currentAccount);
+    await checkinRes.wait();
+    await getRenter();
+    await getTotalDuration();
+    await getDue();
+    alert('Check In Successfull')
+  }
+
+  const getRenter = async()=> {
+    const renterDetailsInfo = await contract.getRenter(currentAccount);
+    setRenterDetails(renterDetailsInfo);
   }
 
   useEffect(()=> {
@@ -113,6 +155,7 @@ const BlockchainProvider = ({ children }) => {
         getBalance();
         getDue();
         getTotalDuration();
+        getRenter();
 
     }
 
@@ -121,7 +164,7 @@ const BlockchainProvider = ({ children }) => {
 
 
   return (
-    <BlockchainContext.Provider value={{ connectWallet, currentAccount, renter , addRenter, diposit, balance, due, totalDuration}}>
+    <BlockchainContext.Provider value={{ connectWallet, currentAccount, renter , addRenter, diposit, balance, due, totalDuration, checkoutBike, checkinBike, makeduePayment, renterDetails}}>
       {children}
     </BlockchainContext.Provider>
   );
