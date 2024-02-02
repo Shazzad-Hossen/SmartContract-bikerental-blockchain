@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { abi, contractAddress } from "../config.json";
 import { ethers, formatUnits, parseUnits } from "ethers";
+import { toast } from "react-toastify";
 
 export const BlockchainContext = createContext();
 
@@ -100,6 +101,7 @@ const BlockchainProvider = ({ children }) => {
     const dipositRes = await contract.diposit(currentAccount, { value: parseUnits(amount, 18)});
     await dipositRes.wait();
     await getBalance();
+    toast.success('Diposite successfull');
     
   }
 
@@ -111,7 +113,7 @@ const BlockchainProvider = ({ children }) => {
     await getBalance();
     await getDue();
     await getTotalDuration();
-    if(paymentRes) alert('Due Payment Successful');
+    if(paymentRes) toast.success('Due Payment Successful');
     
   }
 
@@ -121,7 +123,7 @@ const BlockchainProvider = ({ children }) => {
     const checkoutRes= await contract.checkOut(currentAccount);
     await checkoutRes.wait();
     await getRenter();
-    if(checkoutRes) alert('Checkout Successfull');
+    if(checkoutRes) toast.success('Checkout Successfull');
   }
 
   //Checkin Bike
@@ -132,7 +134,7 @@ const BlockchainProvider = ({ children }) => {
     await getRenter();
     await getTotalDuration();
     await getDue();
-    alert('Check In Successfull')
+    toast.success('Check In Successfull')
   }
 
   const getRenter = async()=> {
