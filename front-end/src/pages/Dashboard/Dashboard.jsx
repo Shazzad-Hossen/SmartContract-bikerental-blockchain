@@ -8,13 +8,25 @@ import kawasaki from '../../assets/kawasaki.png';
 import mt09 from '../../assets/sec03_04_mt-09.jpg';
 import { useContext, useState } from "react";
 import { BlockchainContext } from "../../context/BlockchainContext";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const {renter, addRenter, diposit, balance, due, totalDuration, checkoutBike, checkinBike, makeduePayment, renterDetails}= useContext(BlockchainContext);
   const [name,setName]=useState({first:'', last:''});
   const [creditAmount, setCreditAmount]=useState(0);
   const [duepaymentAmount, setDuepaymentamount]=useState(0);
+  console.log(renterDetails);
   
+  const handleCheckoutBike = ()=> {
+    if(renterDetails && renterDetails[2]===true && renterDetails[3]===false) checkoutBike();
+    else toast.error('Sorry! You can not Checkout Now')
+  }
+
+  const handlecheckinBike = ()=> {
+    if(renterDetails && renterDetails[3]===true) checkinBike();
+    else toast.error('Sorry! You can not CheckIn Now')
+  }
+
 
   return (
     <>
@@ -109,8 +121,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The KTM RC 390 is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && renterDetails[3]}  onClick={()=>checkoutBike()} >Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && !renterDetails[3]}  onClick={checkinBike}>Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={()=>handleCheckoutBike()} >Rent</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" onClick={handlecheckinBike}>Return</button>
                     </div>
                 </div>
             </div>
@@ -122,8 +134,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The Kawasaki Ninja ZX-10R is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && renterDetails[3]}   onClick={()=>checkoutBike()}>Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && !renterDetails[3]}  onClick={checkinBike}>Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={()=>handleCheckoutBike()}>Rent</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={handlecheckinBike}>Return</button>
                     </div>
                 </div>
             </div>
@@ -135,8 +147,8 @@ const Dashboard = () => {
                     <p className="text-justify font-[500]">The Yamaha MT09 is a high-performance sport motorcycle known for its aggressive design and dynamic performance. Powered by a 373.2cc single-cylinder engine, it boasts impressive horsepower and torque. With a lightweight frame, advanced suspension, and modern features like a slipper clutch, the RC 390 offers an exhilarating riding experience on both the road and track.</p>
 
                     <div className="flex justify-center items-center gap-2 py-5">
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && renterDetails[3]}  onClick={()=>checkoutBike()}>Check Out</button>
-                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]" disabled={ renterDetails && !renterDetails[3]}  onClick={checkinBike}>Check In</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={()=>handleCheckoutBike()}>Rent</button>
+                        <button className="bg-sky-700 p-2 rounded shadow-md active:scale-95 text-white font-[700] w-[150px]"  onClick={handlecheckinBike}>Return</button>
                     </div>
                 </div>
             </div>

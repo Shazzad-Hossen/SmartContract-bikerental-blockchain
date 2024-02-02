@@ -113,6 +113,7 @@ const BlockchainProvider = ({ children }) => {
     await getBalance();
     await getDue();
     await getTotalDuration();
+    await getRenter();
     if(paymentRes) toast.success('Due Payment Successful');
     
   }
